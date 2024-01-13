@@ -1,13 +1,15 @@
+require('dotenv').config()
 const sgMail = require('@sendgrid/mail')
 
-const sendgridAPIKey = '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 '
+const sendgridAPIKey = process.env.SENDGRID_API_KEY
+const usermail = process.env.USER_EMAIL
 
 sgMail.setApiKey(sendgridAPIKey)
 
 const sendWelcomeEmail = (email,name)=>{
     sgMail.send({
         to:email,
-        from:'viniciusmarconatto@hotmail.com',
+        from:usermail,
         subject:'Thanks for joining in!',
         text:`Welcome to the app, ${name}. Let me know how you get along with the app`
     })

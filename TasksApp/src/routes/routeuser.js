@@ -1,20 +1,20 @@
 const Users = require('../model/user.js')
 const mongoose = require('mongoose')
 const express = require('express')
+
 const routeuser = express.Router()
 const auth = require('../middleware/auth.js')
 const multer = require('multer')
+
 const sharp = require('sharp')
 const sendWelcomeEmail = require('../emails/account.js')
 
 
 routeuser.post('/Usuarios', async (req, res) => {
     const user = new Users(req.body)
-
-
     try {
         await user.save()
-        sendWelcomeEmail(user.email,user.name)
+        sendWelcomeEmail(user.email, user.name)
         //const token = user.generateAuthToken()
         res.status(200).send(user)
     }
@@ -75,7 +75,10 @@ routeuser.patch('/Usuarios/me', auth, async (req, res) => {
     const isValidOperation = updates.every((update) => {
         allowedUpdates.includes(update)
     })
-updates
+
+    if (!isValidOperation) {
+        return res.status(400).send('Invalid Updates')
+    }
     try {
         updates.forEach((update) => req.user[update] = req.body[update])
         await req.user.save()
@@ -125,7 +128,7 @@ routeuser.post('/Usuarios/me/avatar', auth, upload.single('avatar'), async (req,
     res.status(400).send({ error: error.message })
 })
 
-routeuser.delete('/Usuarios/me/avatar',auth,async(req,res)=>{
+routeuser.delete('/Usuarios/me/avatar', auth, async (req, res) => {
     req.user.avatar = undefined
     await req.user.save()
     res.send()
