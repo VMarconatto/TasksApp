@@ -6,6 +6,6 @@ mongoose.connect(process.env.connectionstring,{useNewUrlParser:true,useUnifiedTo
     console.log('Connection to MongoDB Sucesseful')
 })
 .catch((e)=>{
-    console.log('Alguma coisa deu errada')
+    console.log('Please, Check Connection String and Parameters')
     console.log(e)
 })
